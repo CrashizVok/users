@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Users List</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadUsers() {
+            try {
+                const res = await fetch('http://localhost:3000/users');
+                const users = await res.json();
+
+                const tbody = document.getElementById('userTableBody');
+                tbody.innerHTML = '';
+
+                users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>`;
+                    tbody.appendChild(tr);
+                })
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        loadUsers();
+    </script>
+</body>
+</html>

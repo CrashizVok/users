@@ -1,7 +1,9 @@
 const { log } = require("node:console")
 const express = require("express")
 const argon2 = require("argon2");
+const cors = require('cors');
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const knex = require("knex")({
@@ -84,13 +86,51 @@ app.post("/users", async (req, res) =>{
 })
 
 // PUT /users/{id}
-app.put("/users:id", (req, res) =>{
+app.put("/users/:id", async (req, res) =>{
+    const {id} = req.params
+    const {name, email, password} = req.body
 
+    try{
+        const data = {}
+
+        data.name = name
+        data.email = email
+        data.password = await argon2.hash(password)
+
+        const update = await knex("users").where("id",id).update(data)
+
+        if (update == 0){
+            log("PUT /users:id --> ", error.message)
+            res.status(500).json({error: "Something isn't right. Please try again later! (NO ID FOUND)"})
+        }
+
+        return res.status(200).json({})
+
+    }
+    catch (error){
+        log("PUT /users/:id --> ", error.message)
+        res.status(500).json({error: "Something isn't right. Please try again later!"})
+    }
 })
 
 //  DELETE /users/{id}
-app.delete("/users:id", (req, res) =>{
+app.delete("/users/:id", async (req, res) =>{
+    const {id} = req.params
 
+    try{
+        const data = await knex("users").where("id", id).delete()
+
+        if (data === 1){
+            res.status(200).json({ response: `User with ID ${id} has been successfully deleted`})
+        }
+        else{
+            res.status(404).json({error: "Not found"})
+        }
+    }
+    catch (error){
+        log("DELETE /users/:id --> ", error.message)
+        res.status(500).json({error: "Something isn't right. Please try again later!"})
+    }
 })
 
 
