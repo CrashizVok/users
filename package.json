@@ -1,0 +1,30 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/CrashizVok/users#readme",
+  "bugs": {
+    "url": "https://github.com/CrashizVok/users/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrashizVok/users.git"
+  },
+  "type": "commonjs",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma skills sync || exit 0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "argon2": "^0.45.1",
+    "express": "^5.2.1",
+    "knex": "^3.3.0",
+    "mysql2": "^3.24.4",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "prisma": "^8.0.0-rc.17"
+  }
+}
